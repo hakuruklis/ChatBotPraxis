@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="/static/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  </head>
+  <body>
+    <div style="height:100px; width:400px; margin:auto">
+      <img src="../static/img/votoinformado.jpg" alt="Imagen Voto Informado" style="width:100%; display:absolute">
+    </div>
+    <div style="margin-top:100px">
+      <div id="chatbox">
+        <p class="botText"><span>Hola, soy PraxisBot, hazme una pregusta sobre politica y tratare de responderla!</span></p>
+        <p class="botText"><span>Me puedes hacer preguntas como: <ul>
+          <li class="botText"><span>¿Qué es la democracia?</span></li>
+          <li class="botText"><span>¿Qué es la política?</span></li>
+          <li class="botText"><span>¿Qué es el Poder?</span></li>
+        </ul></span></p>
+      </div>
+      <div id="userInput">
+        <input id="textInput" type="text" name="msg" placeholder="Pregunta">
+        <input id="buttonInput" type="submit" value="Enviar">
+      </div>
+      <script>
+        function getBotResponse() {
+          var rawText = $("#textInput").val();
+          var userHtml = '<p class="userText"><span>' + rawText + '</span></p>';
+          $("#textInput").val("");
+          $("#chatbox").append(userHtml);
+          document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
+          $.get("/get", { msg: rawText }).done(function(data) {
+            var botHtml = '<p class="botText"><span>' + data + '</span></p>';
+            $("#chatbox").append(botHtml);
+            document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
+          });
+        }
+        $("#textInput").keypress(function(e) {
+            if(e.which == 13) {
+                getBotResponse();
+            }
+        });
+        $("#buttonInput").click(function() {
+          getBotResponse();
+        })
+      </script>
+    </div>
+  </body>
+</html>
